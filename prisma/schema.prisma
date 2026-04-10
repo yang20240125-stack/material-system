@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ItemLevel {
+  NORMAL
+  SPECIAL
+}
+
+enum ActionType {
+  CLAIM
+  RETURN
+  ADD
+  EDIT
+  DELETE
+}
+
+model User {
+  id              String    @id @default(uuid())
+  dingtalk_userid String    @unique
+  name            String
+  avatar          String?
+  role            Role      @default(USER)
+  records         Record[]  @relation("UserRecords")
+  adminRecords    Record[]  @relation("AdminRecords")
+  chatLogs        ChatLog[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Item {
+  id        String    @id @default(uuid())
+  name      String
+  imageUrl  String?
+  stock     Int       @default(0)
+  category  String
+  level     ItemLevel @default(NORMAL)
+  records   Record[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Record {
+  id         String     @id @default(uuid())
+  userId     String
+  user       User       @relation("UserRecords", fields: [userId], references: [id])
+  itemId     String
+  item       Item       @relation(fields: [itemId], references: [id])
+  quantity   Int
+  actionType ActionType
+  adminId    String?
+  admin      User?      @relation("AdminRecords", fields: [adminId], references: [id])
+  createdAt  DateTime   @default(now())
+}
+
+model SystemConfig {
+  id          Int      @id @default(autoincrement())
+  configKey   String   @unique
+  configValue String
+  updatedAt   DateTime @updatedAt
+}
+
+model ChatLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  role      String
+  content   String
+  metadata  String?
+  createdAt DateTime @default(now())
+}
