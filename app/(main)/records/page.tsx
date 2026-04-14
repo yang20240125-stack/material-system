@@ -24,6 +24,7 @@ const ACTION_LABELS: Record<string, { label: string; variant: "default" | "secon
   ADD: { label: "入库", variant: "outline" },
   EDIT: { label: "编辑", variant: "outline" },
   DELETE: { label: "删除", variant: "destructive" },
+  TRANSFER: { label: "转移", variant: "default" },
 };
 
 interface RecordItem {
@@ -99,6 +100,7 @@ export default function RecordsPage() {
             <SelectItem value="ADD">入库</SelectItem>
             <SelectItem value="EDIT">编辑</SelectItem>
             <SelectItem value="DELETE">删除</SelectItem>
+            <SelectItem value="TRANSFER">转移</SelectItem>
           </SelectContent>
         </Select>
 

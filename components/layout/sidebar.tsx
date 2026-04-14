@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useAppStore } from "@/lib/store";
-import { Package, ClipboardList, Settings, Lock, Bot } from "lucide-react";
+import { Package, ClipboardList, Settings, Lock, Bot, ShieldCheck } from "lucide-react";
 
 const navItems = [
   {
@@ -12,6 +12,12 @@ const navItems = [
     href: "/materials",
     icon: Package,
     adminOnly: false,
+  },
+  {
+    label: "特殊物资",
+    href: "/special-items",
+    icon: ShieldCheck,
+    adminOnly: true,
   },
   {
     label: "流转台账",

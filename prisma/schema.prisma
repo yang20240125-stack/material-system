@@ -22,31 +22,34 @@ enum ActionType {
   ADD
   EDIT
   DELETE
+  TRANSFER
 }
 
 model User {
-  id              String    @id @default(uuid())
-  dingtalk_userid String    @unique
-  name            String
-  avatar          String?
-  role            Role      @default(USER)
-  records         Record[]  @relation("UserRecords")
-  adminRecords    Record[]  @relation("AdminRecords")
-  chatLogs        ChatLog[]
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                    String                  @id @default(uuid())
+  dingtalk_userid       String                  @unique
+  name                  String
+  avatar                String?
+  role                  Role                    @default(USER)
+  records               Record[]                @relation("UserRecords")
+  adminRecords          Record[]                @relation("AdminRecords")
+  chatLogs              ChatLog[]
+  specialAllocations    SpecialItemAllocation[]
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
 }
 
 model Item {
-  id        String    @id @default(uuid())
-  name      String
-  imageUrl  String?
-  stock     Int       @default(0)
-  category  String
-  level     ItemLevel @default(NORMAL)
-  records   Record[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id                  String                  @id @default(uuid())
+  name                String
+  imageUrl            String?
+  stock               Int                     @default(0)
+  category            String
+  level               ItemLevel               @default(NORMAL)
+  records             Record[]
+  specialAllocations  SpecialItemAllocation[]
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
 }
 
 model Record {
@@ -60,6 +63,24 @@ model Record {
   adminId    String?
   admin      User?      @relation("AdminRecords", fields: [adminId], references: [id])
   createdAt  DateTime   @default(now())
+}
+
+model SpecialItemAllocation {
+  id         String    @id @default(uuid())
+  itemId     String
+  item       Item      @relation(fields: [itemId], references: [id])
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  quantity   Int       @default(1)
+  department String    @default("")
+  claimedAt  DateTime  @default(now())
+  returnedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([itemId])
+  @@index([userId])
+  @@index([returnedAt])
 }
 
 model SystemConfig {

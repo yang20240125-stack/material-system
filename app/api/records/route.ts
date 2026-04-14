@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
 
   const where: Record<string, unknown> = {};
 
-  if (actionType && ["CLAIM", "RETURN", "ADD", "EDIT", "DELETE"].includes(actionType)) {
+  if (actionType && ["CLAIM", "RETURN", "ADD", "EDIT", "DELETE", "TRANSFER"].includes(actionType)) {
     where.actionType = actionType;
   }
 
